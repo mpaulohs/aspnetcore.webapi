@@ -5,32 +5,20 @@ using System;
 namespace dwa.domain.AggregatesModel.CatalogoAggregate
 {
     public class CatalogoItem : BaseEntity
-    {      
-
+    {    
         public string Nome { get; set; }
-
         public string Descricao { get; set; }
-
         public decimal Preco { get; set; }
-
         public string ImagemFileName { get; set; }
-
         public string ImagemUri { get; set; }
-
         public int CatalogoTipoId { get; set; }
-
         public CatalogoTipo CatalogoTipo { get; set; }
-
         public int CatalogoMarcaId { get; set; }
-
         public CatalogoMarca CatalogoMarca { get; set; }
-
         // Quantidade em estoque
         public int EstoqueDisponivel { get; set; }
-
         // estoque disponível em que devemos reordenar
         public int RestockThreshold { get; set; }
-
 
         // Número máximo de unidades que podem estar em estoque a qualquer momento (devido a restrições físicas / logísticas nos armazéns)
         public int MaxStockThreshold { get; set; }

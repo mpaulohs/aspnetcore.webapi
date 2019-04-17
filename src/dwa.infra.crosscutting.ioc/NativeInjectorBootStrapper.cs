@@ -16,6 +16,7 @@ namespace dwa.infra.crosscutting.ioc
 
 
             services.AddScoped<ICatalagoRepository, CatalagoRepository>();
+            services.AddScoped<ICatalagoMarcaRepository, CatalagoMarcaRepository>();
             services.AddScoped<IBlogRepository, BlogRepository>();
 
         }

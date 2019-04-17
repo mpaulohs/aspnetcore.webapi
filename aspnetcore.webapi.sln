@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dwa.webapi", "src\dwa.webap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dwa.ui.web", "src\dwa.ui.web\dwa.ui.web.csproj", "{287CDC2B-0E08-4F89-8894-DA89D608C718}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demoscroll", "src\demoscroll\demoscroll.csproj", "{DD455628-0D71-4AE9-9E17-67B4DEF90185}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{287CDC2B-0E08-4F89-8894-DA89D608C718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{287CDC2B-0E08-4F89-8894-DA89D608C718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{287CDC2B-0E08-4F89-8894-DA89D608C718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD455628-0D71-4AE9-9E17-67B4DEF90185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD455628-0D71-4AE9-9E17-67B4DEF90185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD455628-0D71-4AE9-9E17-67B4DEF90185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD455628-0D71-4AE9-9E17-67B4DEF90185}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{C24C1577-08F0-4BCB-8F60-1B5DB8131DC8} = {2E0EBA87-45E3-43B6-80D0-6358B5AE8406}
 		{F99C4F94-3611-46EF-B780-37A95DCDD5D0} = {705FCF55-FE07-45D0-BBF1-8283EEFD27AE}
 		{287CDC2B-0E08-4F89-8894-DA89D608C718} = {BB19AC9B-EB69-4814-B556-A727503A380E}
+		{DD455628-0D71-4AE9-9E17-67B4DEF90185} = {C7083B24-EA74-4B16-816A-76DED589605B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {425890B5-A845-4908-A852-7F4B47F6285C}
