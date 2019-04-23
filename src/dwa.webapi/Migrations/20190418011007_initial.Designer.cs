@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dwa.infra.data;
 
-namespace dwa.webapi.Data.Migrations
+namespace dwa.webapi.Migrations
 {
     [DbContext(typeof(DwaContext))]
-    partial class DwaContextModelSnapshot : ModelSnapshot
+    [Migration("20190418011007_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,40 @@ namespace dwa.webapi.Data.Migrations
                 .HasAnnotation("Relational:Sequence:.catalog_marca_hilo", "'catalog_marca_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("Relational:Sequence:.catalogo_tipo_hilo", "'catalogo_tipo_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.CarrinhoAggregate.Carrinho", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClienteId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carrinhos");
+                });
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.CarrinhoAggregate.CarrinhoItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CarrinhoId");
+
+                    b.Property<int>("CatalogoItemId");
+
+                    b.Property<decimal>("PrecoUnitario");
+
+                    b.Property<int>("Quantidade");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarrinhoId");
+
+                    b.ToTable("CarrinhoItem");
+                });
 
             modelBuilder.Entity("dwa.domain.AggregatesModel.CatalogoAggregate.Blog", b =>
                 {
@@ -103,6 +139,40 @@ namespace dwa.webapi.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CatalogoTipo");
+                });
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.OrdemAggregate.Ordem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClienteId");
+
+                    b.Property<DateTimeOffset>("DataPedido");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ordens");
+                });
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.OrdemAggregate.OrdemItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("OrdemId");
+
+                    b.Property<decimal>("PrecoUnitario");
+
+                    b.Property<int>("Unidades");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdemId");
+
+                    b.ToTable("OrderItens");
                 });
 
             modelBuilder.Entity("dwa.domain.AggregatesModel.UsuarioAggregate.Role", b =>
@@ -268,6 +338,13 @@ namespace dwa.webapi.Data.Migrations
                     b.ToTable("Core_UserTokens");
                 });
 
+            modelBuilder.Entity("dwa.domain.AggregatesModel.CarrinhoAggregate.CarrinhoItem", b =>
+                {
+                    b.HasOne("dwa.domain.AggregatesModel.CarrinhoAggregate.Carrinho")
+                        .WithMany("Items")
+                        .HasForeignKey("CarrinhoId");
+                });
+
             modelBuilder.Entity("dwa.domain.AggregatesModel.CatalogoAggregate.CatalogoItem", b =>
                 {
                     b.HasOne("dwa.domain.AggregatesModel.CatalogoAggregate.CatalogoMarca", "CatalogoMarca")
@@ -279,6 +356,75 @@ namespace dwa.webapi.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CatalogoTipoId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.OrdemAggregate.Ordem", b =>
+                {
+                    b.OwnsOne("dwa.domain.AggregatesModel.OrdemAggregate.Endereco", "EnderecoParaEntrega", b1 =>
+                        {
+                            b1.Property<int>("OrdemId")
+                                .ValueGeneratedOnAdd()
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<string>("Cep")
+                                .IsRequired()
+                                .HasMaxLength(100);
+
+                            b1.Property<string>("Cidade")
+                                .IsRequired()
+                                .HasMaxLength(100);
+
+                            b1.Property<string>("Estado")
+                                .HasMaxLength(60);
+
+                            b1.Property<string>("Pais")
+                                .IsRequired()
+                                .HasMaxLength(90);
+
+                            b1.Property<string>("Rua")
+                                .IsRequired()
+                                .HasMaxLength(180);
+
+                            b1.HasKey("OrdemId");
+
+                            b1.ToTable("Ordens");
+
+                            b1.HasOne("dwa.domain.AggregatesModel.OrdemAggregate.Ordem")
+                                .WithOne("EnderecoParaEntrega")
+                                .HasForeignKey("dwa.domain.AggregatesModel.OrdemAggregate.Endereco", "OrdemId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+                });
+
+            modelBuilder.Entity("dwa.domain.AggregatesModel.OrdemAggregate.OrdemItem", b =>
+                {
+                    b.HasOne("dwa.domain.AggregatesModel.OrdemAggregate.Ordem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrdemId");
+
+                    b.OwnsOne("dwa.domain.AggregatesModel.OrdemAggregate.CatalogoItemOrdem", "CatalogoItemOrdem", b1 =>
+                        {
+                            b1.Property<int>("OrdemItemId")
+                                .ValueGeneratedOnAdd()
+                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<int>("CatalogoItemId");
+
+                            b1.Property<string>("PictureUri");
+
+                            b1.Property<string>("ProdutoNome")
+                                .IsRequired()
+                                .HasMaxLength(50);
+
+                            b1.HasKey("OrdemItemId");
+
+                            b1.ToTable("OrderItens");
+
+                            b1.HasOne("dwa.domain.AggregatesModel.OrdemAggregate.OrdemItem")
+                                .WithOne("CatalogoItemOrdem")
+                                .HasForeignKey("dwa.domain.AggregatesModel.OrdemAggregate.CatalogoItemOrdem", "OrdemItemId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
                 });
 
             modelBuilder.Entity("dwa.domain.AggregatesModel.UsuarioAggregate.RoleClaim", b =>

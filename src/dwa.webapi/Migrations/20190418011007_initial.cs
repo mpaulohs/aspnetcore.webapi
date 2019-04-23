@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace dwa.webapi.Data.Migrations
+namespace dwa.webapi.Migrations
 {
     public partial class initial : Migration
     {
@@ -19,6 +19,32 @@ namespace dwa.webapi.Data.Migrations
             migrationBuilder.CreateSequence(
                 name: "catalogo_tipo_hilo",
                 incrementBy: 10);
+
+            migrationBuilder.CreateTable(
+                name: "Blogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Carrinhos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClienteId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carrinhos", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "CatalogoMarca",
@@ -82,6 +108,47 @@ namespace dwa.webapi.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Core_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ordens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClienteId = table.Column<string>(nullable: true),
+                    DataPedido = table.Column<DateTimeOffset>(nullable: false),
+                    EnderecoParaEntrega_Rua = table.Column<string>(maxLength: 180, nullable: false),
+                    EnderecoParaEntrega_Cidade = table.Column<string>(maxLength: 100, nullable: false),
+                    EnderecoParaEntrega_Estado = table.Column<string>(maxLength: 60, nullable: true),
+                    EnderecoParaEntrega_Pais = table.Column<string>(maxLength: 90, nullable: false),
+                    EnderecoParaEntrega_Cep = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ordens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarrinhoItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    PrecoUnitario = table.Column<decimal>(nullable: false),
+                    Quantidade = table.Column<int>(nullable: false),
+                    CatalogoItemId = table.Column<int>(nullable: false),
+                    CarrinhoId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarrinhoItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarrinhoItem_Carrinhos_CarrinhoId",
+                        column: x => x.CarrinhoId,
+                        principalTable: "Carrinhos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,6 +290,35 @@ namespace dwa.webapi.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CatalogoItemOrdem_CatalogoItemId = table.Column<int>(nullable: false),
+                    CatalogoItemOrdem_ProdutoNome = table.Column<string>(maxLength: 50, nullable: false),
+                    CatalogoItemOrdem_PictureUri = table.Column<string>(nullable: true),
+                    PrecoUnitario = table.Column<decimal>(nullable: false),
+                    Unidades = table.Column<int>(nullable: false),
+                    OrdemId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItens_Ordens_OrdemId",
+                        column: x => x.OrdemId,
+                        principalTable: "Ordens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarrinhoItem_CarrinhoId",
+                table: "CarrinhoItem",
+                column: "CarrinhoId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Catalogo_CatalogoMarcaId",
                 table: "Catalogo",
@@ -271,10 +367,21 @@ namespace dwa.webapi.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItens_OrdemId",
+                table: "OrderItens",
+                column: "OrdemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Blogs");
+
+            migrationBuilder.DropTable(
+                name: "CarrinhoItem");
+
             migrationBuilder.DropTable(
                 name: "Catalogo");
 
@@ -294,6 +401,12 @@ namespace dwa.webapi.Data.Migrations
                 name: "Core_UserTokens");
 
             migrationBuilder.DropTable(
+                name: "OrderItens");
+
+            migrationBuilder.DropTable(
+                name: "Carrinhos");
+
+            migrationBuilder.DropTable(
                 name: "CatalogoMarca");
 
             migrationBuilder.DropTable(
@@ -304,6 +417,9 @@ namespace dwa.webapi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Core_Users");
+
+            migrationBuilder.DropTable(
+                name: "Ordens");
 
             migrationBuilder.DropSequence(
                 name: "catalog_hilo");

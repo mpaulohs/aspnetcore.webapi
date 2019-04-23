@@ -1,8 +1,108 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+<div class="row">
+    <div class="col-xl-12">
+        <div class="breadcrumb-holder">
+            <h1 class="main-title float-left">Blank Page</h1>
+            <ol class="breadcrumb float-right">
+                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">Blank Page</li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card mb-3">
+
+            <div class="card-header">
+                <span class="pull-right"><button class="btn btn-primary btn-sm" id="add-cliente"><i class="fa fa-plus" aria-hidden="true"></i> Add new slide image</button></span>
+                
+                <h3><i class="fa fa-image"></i> Slider (3 images)</h3>
+            </div>
+            <!-- end card-header -->
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>Nome</td>
+                                <td>Tempo</td>
+                                <td>Actions</td>
+                            </tr>
+                        </thead>
+                        <tbody id="listitem">
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+            <!-- end card-body -->
+
+        </div>
+        <!-- end card -->
+
+    </div>
+    <!-- end col -->
+
+</div>
+
+@section Scripts {
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/easy-countdown/2.2.0/jquery.countdown.min.js"></script>
+
+
+    <script>
+        $(function () {
+
+        })
+
+        function generateGuid() {
+  var result, i, j;
+  result = '';
+  for(j=0; j<32; j++) {
+    if( j == 8 || j == 12 || j == 16 || j == 20) 
+      result = result + '-';
+    i = Math.floor(Math.random()*16).toString(16).toUpperCase();
+    result = result + i;
+  }
+  return result;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+        $("#add-cliente").on("click", function () {
+                var tempo = 10000;
+                var nome = "Marcos";
+                var guid = generateGuid();
+
+                var tr = (
+                    '<tr class="table-success" id="' + guid + '">' +
+                    '<td>' + nome + '</td>' +
+                    '<td class="countdown callback" data-guid="' + guid + '"></td>' +
+                    '<td> <a id="' + guid + '" class="btn btn-info btn-sm cancelar-cliente">Cancelar</a>  <a id="' + guid + '" data-brinquedo_id="' + guid + '" data-nome="' + nome + '" class="btn btn-warning btn-sm btn-faturar">Faturar</a> </td>' +
+                    '</tr>'
+                );
+                $("#listitem").append(tr);
+
+                $('.countdown.callback').countdown({
+                    date: +(new Date) + tempo, // 10000,
+                    render: function (data) {
+                        $(this.el).text(this.leadingZeros(data.hours, 2) + ":" + this.leadingZeros(data.min, 2) + ":" + this.leadingZeros(data.sec, 2));
+                    },
+                    onEnd: function () {                       
+                        var id = "#" + $(this.el).data("guid");                     
+                        $(id).removeClass('table-success').addClass('table-danger');                      
+                        
+                    }
+                });
+           
+        });
+    </script>
+}
+

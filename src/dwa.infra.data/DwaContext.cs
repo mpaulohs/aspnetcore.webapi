@@ -1,5 +1,6 @@
 ﻿using dwa.domain.AggregatesModel.CarrinhoAggregate;
 using dwa.domain.AggregatesModel.CatalogoAggregate;
+using dwa.domain.AggregatesModel.LancamentoAggregate;
 using dwa.domain.AggregatesModel.OrdemAggregate;
 using dwa.domain.AggregatesModel.UsuarioAggregate;
 using dwa.infra.data.EntityConfigurations;
@@ -10,7 +11,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace dwa.infra.data
 {
     public class DwaContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
-    {      
+    {
+        public DbSet<Receita> Receita { get; set; }
+        public DbSet<ReceitaCategoria> ReceitaCategoria { get; set; }
+        public DbSet<Despesa> Despesa { get; set; }
+        public DbSet<DespesaCategoria> DespesaCategoria { get; set; }
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Carrinho> Carrinhos { get; set; }
         public DbSet<CatalogoItem> CatalogoItens { get; set; }
